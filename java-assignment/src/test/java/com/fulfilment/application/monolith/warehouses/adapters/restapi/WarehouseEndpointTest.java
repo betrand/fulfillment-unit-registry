@@ -147,7 +147,8 @@ public class WarehouseEndpointTest {
         .when()
         .post("/warehouse/" + businessUnitCode + "/replacement")
         .then()
-        .statusCode(400);
+        .statusCode(400)
+        .body(containsString("Replacement stock must match current warehouse stock"));
   }
 
   @Test
