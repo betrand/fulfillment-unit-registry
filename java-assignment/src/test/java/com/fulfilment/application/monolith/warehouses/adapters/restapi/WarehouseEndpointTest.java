@@ -172,7 +172,7 @@ public class WarehouseEndpointTest {
   }
 
   @Test
-  public void testReplaceWarehouseWithStockAboveCapacityShouldReturnBadRequest() {
+  public void testReplaceWarehouseWithCapacityNotAccommodatingCurrentStockShouldReturnBadRequest() {
     String businessUnitCode = randomBusinessUnitCode();
 
     given()
