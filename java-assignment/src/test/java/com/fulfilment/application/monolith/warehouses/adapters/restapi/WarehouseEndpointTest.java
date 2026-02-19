@@ -104,12 +104,38 @@ public class WarehouseEndpointTest {
   }
 
   @Test
+  public void testCreateWarehouseWithCapacityAboveLocationMaxShouldReturnBadRequest() {
+    String businessUnitCode = randomBusinessUnitCode();
+
+    given()
+        .contentType("application/json")
+        .body(warehousePayload(businessUnitCode, "HELMOND-001", 46, 10))
+        .when()
+        .post("/warehouse")
+        .then()
+        .statusCode(400);
+  }
+
+  @Test
+  public void testCreateWarehouseWithStockAboveCapacityShouldReturnBadRequest() {
+    String businessUnitCode = randomBusinessUnitCode();
+
+    given()
+        .contentType("application/json")
+        .body(warehousePayload(businessUnitCode, "AMSTERDAM-002", 20, 21))
+        .when()
+        .post("/warehouse")
+        .then()
+        .statusCode(400);
+  }
+
+  @Test
   public void testReplaceWarehouseWithStockMismatchShouldReturnBadRequest() {
     String businessUnitCode = randomBusinessUnitCode();
 
     given()
         .contentType("application/json")
-        .body(warehousePayload(businessUnitCode, "AMSTERDAM-002", 20, 8))
+        .body(warehousePayload(businessUnitCode, "EINDHOVEN-001", 20, 8))
         .when()
         .post("/warehouse")
         .then()
@@ -117,7 +143,49 @@ public class WarehouseEndpointTest {
 
     given()
         .contentType("application/json")
-        .body(warehousePayload("IGNORED", "AMSTERDAM-002", 25, 7))
+        .body(warehousePayload("IGNORED", "EINDHOVEN-001", 25, 7))
+        .when()
+        .post("/warehouse/" + businessUnitCode + "/replacement")
+        .then()
+        .statusCode(400);
+  }
+
+  @Test
+  public void testReplaceWarehouseWithCapacityAboveLocationMaxShouldReturnBadRequest() {
+    String businessUnitCode = randomBusinessUnitCode();
+
+    given()
+        .contentType("application/json")
+        .body(warehousePayload(businessUnitCode, "ZWOLLE-002", 20, 8))
+        .when()
+        .post("/warehouse")
+        .then()
+        .statusCode(200);
+
+    given()
+        .contentType("application/json")
+        .body(warehousePayload("IGNORED", "HELMOND-001", 46, 8))
+        .when()
+        .post("/warehouse/" + businessUnitCode + "/replacement")
+        .then()
+        .statusCode(400);
+  }
+
+  @Test
+  public void testReplaceWarehouseWithStockAboveCapacityShouldReturnBadRequest() {
+    String businessUnitCode = randomBusinessUnitCode();
+
+    given()
+        .contentType("application/json")
+        .body(warehousePayload(businessUnitCode, "HELMOND-001", 20, 8))
+        .when()
+        .post("/warehouse")
+        .then()
+        .statusCode(200);
+
+    given()
+        .contentType("application/json")
+        .body(warehousePayload("IGNORED", "HELMOND-001", 7, 8))
         .when()
         .post("/warehouse/" + businessUnitCode + "/replacement")
         .then()
@@ -130,7 +198,7 @@ public class WarehouseEndpointTest {
 
     given()
         .contentType("application/json")
-        .body(warehousePayload(businessUnitCode, "AMSTERDAM-002", 20, 8))
+        .body(warehousePayload(businessUnitCode, "VETSBY-001", 20, 8))
         .when()
         .post("/warehouse")
         .then()
