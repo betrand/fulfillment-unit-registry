@@ -35,8 +35,8 @@ public class ReplaceWarehouseUseCase implements ReplaceWarehouseOperation {
       throw new IllegalArgumentException("Invalid warehouse location: " + newWarehouse.location);
     }
 
-    validateCapacityAndStock(newWarehouse, location.maxCapacity);
     validateReplacementRules(currentWarehouse, newWarehouse);
+    validateCapacityAndStock(newWarehouse, location.maxCapacity);
     validateCapacityAndWarehouseCountAtLocationAfterReplacement(currentWarehouse, newWarehouse, location.maxNumberOfWarehouses, location.maxCapacity);
 
     currentWarehouse.archivedAt = LocalDateTime.now();
