@@ -111,6 +111,27 @@ public class WarehouseEndpointTest {
         .statusCode(400);
   }
 
+  @Test
+  public void testReplaceWarehouseWithInvalidLocationShouldReturnBadRequest() {
+    String businessUnitCode = randomBusinessUnitCode();
+
+    given()
+        .contentType("application/json")
+        .body(warehousePayload(businessUnitCode, "AMSTERDAM-002", 20, 8))
+        .when()
+        .post("/warehouse")
+        .then()
+        .statusCode(200);
+
+    given()
+        .contentType("application/json")
+        .body(warehousePayload("IGNORED", "UNKNOWN-001", 25, 8))
+        .when()
+        .post("/warehouse/" + businessUnitCode + "/replacement")
+        .then()
+        .statusCode(400);
+  }
+
   private String randomBusinessUnitCode() {
     return "MWH.NEW." + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
   }
