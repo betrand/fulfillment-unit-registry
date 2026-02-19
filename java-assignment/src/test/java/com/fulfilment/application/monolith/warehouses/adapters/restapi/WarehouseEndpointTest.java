@@ -91,6 +91,19 @@ public class WarehouseEndpointTest {
   }
 
   @Test
+  public void testCreateWarehouseWhenLocationMaxIsReachedShouldReturnBadRequest() {
+    String businessUnitCode = randomBusinessUnitCode();
+
+    given()
+        .contentType("application/json")
+        .body(warehousePayload(businessUnitCode, "ZWOLLE-001", 20, 10))
+        .when()
+        .post("/warehouse")
+        .then()
+        .statusCode(400);
+  }
+
+  @Test
   public void testReplaceWarehouseWithStockMismatchShouldReturnBadRequest() {
     String businessUnitCode = randomBusinessUnitCode();
 
