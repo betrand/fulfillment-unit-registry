@@ -80,6 +80,17 @@ public class WarehouseEndpointTest {
   }
 
   @Test
+  public void testCreateWarehouseWithExistingBusinessUnitCodeShouldReturnBadRequest() {
+    given()
+        .contentType("application/json")
+        .body(warehousePayload("MWH.001", "AMSTERDAM-001", 20, 10))
+        .when()
+        .post("/warehouse")
+        .then()
+        .statusCode(400);
+  }
+
+  @Test
   public void testReplaceWarehouseWithStockMismatchShouldReturnBadRequest() {
     String businessUnitCode = randomBusinessUnitCode();
 
