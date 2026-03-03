@@ -8,7 +8,6 @@ import com.warehouse.api.WarehouseResource;
 import com.warehouse.api.beans.Warehouse;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.WebApplicationException;
 import java.util.List;
@@ -29,7 +28,6 @@ public class WarehouseResourceImpl implements WarehouseResource {
   }
 
   @Override
-  @Transactional
   @ResponseStatus(201)
   public Warehouse createANewWarehouseUnit(@NotNull Warehouse data) {
     var warehouse = toDomainWarehouse(data);
@@ -52,7 +50,6 @@ public class WarehouseResourceImpl implements WarehouseResource {
   }
 
   @Override
-  @Transactional
   @ResponseStatus(204)
   public void archiveAWarehouseUnitByID(String id) {
     var warehouse = findWarehouseByIdentifier(id);
@@ -68,7 +65,6 @@ public class WarehouseResourceImpl implements WarehouseResource {
   }
 
   @Override
-  @Transactional
   public Warehouse replaceTheCurrentActiveWarehouse(
       String businessUnitCode, @NotNull Warehouse data) {
     var warehouse = toDomainWarehouse(data);
