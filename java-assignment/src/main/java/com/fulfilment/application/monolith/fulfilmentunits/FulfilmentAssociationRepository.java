@@ -1,11 +1,26 @@
 package com.fulfilment.application.monolith.fulfilmentunits;
 
+import com.fulfilment.application.monolith.fulfilmentunits.domain.ports.FulfilmentAssociationStore;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.util.List;
 
 @ApplicationScoped
-public class FulfilmentAssociationRepository implements PanacheRepository<FulfilmentAssociation> {
+public class FulfilmentAssociationRepository
+    implements PanacheRepository<FulfilmentAssociation>, FulfilmentAssociationStore {
 
+  @Override
+  public List<FulfilmentAssociation> listAllById() {
+    return listAll(Sort.by("id"));
+  }
+
+  @Override
+  public void create(FulfilmentAssociation association) {
+    persist(association);
+  }
+
+  @Override
   public boolean existsAssociation(Long productId, Long storeId, String warehouseBusinessUnitCode) {
     return count(
             "productId = ?1 and storeId = ?2 and warehouseBusinessUnitCode = ?3",
@@ -15,16 +30,19 @@ public class FulfilmentAssociationRepository implements PanacheRepository<Fulfil
         > 0;
   }
 
+  @Override
   public boolean existsWarehouseForStore(Long storeId, String warehouseBusinessUnitCode) {
     return count("storeId = ?1 and warehouseBusinessUnitCode = ?2", storeId, warehouseBusinessUnitCode)
         > 0;
   }
 
+  @Override
   public boolean existsProductForWarehouse(String warehouseBusinessUnitCode, Long productId) {
     return count("warehouseBusinessUnitCode = ?1 and productId = ?2", warehouseBusinessUnitCode, productId)
         > 0;
   }
 
+  @Override
   public long countDistinctWarehousesForProductAndStore(Long productId, Long storeId) {
     return getEntityManager()
         .createQuery(
@@ -37,6 +55,7 @@ public class FulfilmentAssociationRepository implements PanacheRepository<Fulfil
         .getSingleResult();
   }
 
+  @Override
   public long countDistinctWarehousesForStore(Long storeId) {
     return getEntityManager()
         .createQuery(
@@ -48,6 +67,7 @@ public class FulfilmentAssociationRepository implements PanacheRepository<Fulfil
         .getSingleResult();
   }
 
+  @Override
   public long countDistinctProductsForWarehouse(String warehouseBusinessUnitCode) {
     return getEntityManager()
         .createQuery(
@@ -59,4 +79,3 @@ public class FulfilmentAssociationRepository implements PanacheRepository<Fulfil
         .getSingleResult();
   }
 }
-
