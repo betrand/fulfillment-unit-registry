@@ -135,12 +135,7 @@
                         <configuration>
                             <rules>
                                 <rule>
-                                    <element>CLASS</element>
-                                    <includes>
-                                        <include>com.fulfilment.application.monolith.*.application.usecases.*</include>
-                                        <include>com.fulfilment.application.monolith.warehouses.domain.usecases.*</include>
-                                        <include>com.fulfilment.application.monolith.shared.adapters.restapi.GlobalErrorMapper</include>
-                                    </includes>
+                                    <element>BUNDLE</element>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
